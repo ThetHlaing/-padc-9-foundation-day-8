@@ -54,6 +54,7 @@ class ConcreteSubject(Subject):
         self._observers.append(observer)
 
     def detach(self, observer: Observer) -> None:
+        print("Subject: Removed an observer.")
         self._observers.remove(observer)
 
     """
