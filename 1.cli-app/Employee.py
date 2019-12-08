@@ -1,14 +1,16 @@
 from Database import Database
 from Department import Department
+from BaseModel import BaseModel
 
 
-class Employee:
+class Employee(BaseModel):
 
     id = None
     name = None
     position = None
     salary = None
     department_id = None
+    table_name = 'employees'
 
     def __init__(self, tuple=None):
         if(tuple):
@@ -42,16 +44,13 @@ class Employee:
 
 
     @staticmethod
-    def find(id):
-        Database._cursor.execute("Select * from employees where id = %s",[id])
-        result = Database._cursor.fetchone()
-        return Employee(result)
+    def find(id):        
+        return Employee(Database.base_find(id,Employee.table_name))
 
     @staticmethod
     def get():
-        Database._cursor.execute("Select * from employees")
         employee_list = []
-        for employeeTuple in Database._cursor.fetchall():
+        for employeeTuple in Database.base_get(Employee.table_name):
             employee = Employee(employeeTuple)
             employee_list.append(employee)
         return employee_list

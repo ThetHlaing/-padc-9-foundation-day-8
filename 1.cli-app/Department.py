@@ -1,9 +1,10 @@
 from Database import Database
+from BaseModel import BaseModel
 
-
-class Department:
+class Department(BaseModel):
     id = None
     name = None
+    table_name = 'departments'
 
     def __init__(self,tuple_data = None):
         if(tuple_data):
@@ -22,16 +23,14 @@ class Department:
         print(f'[{self.id}] - {self.name} Department')
 
     @staticmethod
-    def find(id):
-        Database._cursor.execute("Select * from departments where id = %s",[id])
-        result = Database._cursor.fetchone()
-        return Department(result)
+    def find(id): 
+        result_tuple = Database.base_find(id,'departments')
+        return Department(result_tuple)
     
     @staticmethod
     def get():
-        Database._cursor.execute("Select * from departments")
         department_list = []
-        for departmentTuple in Database._cursor.fetchall():
+        for departmentTuple in Database.base_get('departments'):
             department = Department(departmentTuple)
             department_list.append(department)
         return department_list
